@@ -1,0 +1,56 @@
+Given a Binary Tree, find diameter of it.
+The diameter of a tree is the number of nodes on the longest path between two end nodes in the tree. 
+The diagram below shows two trees each with diameter nine, the leaves that form the ends of a longest path are shaded 
+(note that there is more than one path in each tree of length nine, but no path longer than nine nodes).
+
+Input:
+       1
+     /  \
+    2    3
+Output: 3
+Example 2:
+
+Input:
+         10
+        /   \
+      20    30
+    /   \ 
+   40   60
+Output: 4
+
+
+
+
+// Code:
+
+class Solution {
+  public:
+    int height(Node* root){
+        if( root == NULL)
+            return 0;
+            
+        return max( height(root->left), height(root->right))+1;
+            
+    }
+    // Function to return the diameter of a Binary Tree.
+    int diameter(Node* root) {
+        // Your code here
+        if(root == NULL) 
+        return 0;
+    
+        int lh = height( root->left);
+        int rh = height( root->right);
+        
+        //curr diameter means if we are including currnode in diameter which is the sum of
+        // leftHeight + rightHeight+1
+        int currDiameter = lh+rh+1;
+        
+        //we are calculating left diameter that means of left node.
+        int leftDiameter = diameter(root->left);
+        //we are calculating right diameter that means of right node.
+        int rightDiameter = diameter(root->right);
+
+        //after this we have to take max of all 3 cases.        
+        return max( currDiameter, max(leftDiameter, rightDiameter));
+    }
+};
