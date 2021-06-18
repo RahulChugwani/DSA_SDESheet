@@ -1,0 +1,62 @@
+Given a binary tree, print the bottom view from left to right.
+A node is included in bottom view if it can be seen when we look at the tree from bottom.
+
+                      20
+                    /    \
+                  8       22
+                /   \        \
+              5      3       25
+                    /   \      
+                  10    14
+
+For the above tree, the bottom view is 5 10 3 14 25.
+If there are multiple bottom-most nodes for a horizontal distance from root, then print the later one in level traversal. 
+For example, in the below diagram, 3 and 4 are both the bottommost nodes at horizontal distance 0, we need to print 4.
+
+                      20
+                    /    \
+                  8       22
+                /   \     /   \
+              5      3 4     25
+                     /    \      
+                 10       14
+
+For the above tree the output should be 5 10 4 14 25.
+
+
+
+
+// Code:
+
+void bottomViewUtil(Node* root, int hlevel, int vlevel, map<int, pair<int, int>>& m){
+    
+    if( root == NULL)
+        return;
+        
+    if( m.find(vlevel) == m.end() || hlevel >= m[vlevel].second){
+        m[vlevel] = pair<int, int>{root->data, hlevel};
+    }
+    
+    bottomViewUtil( root->left, hlevel+1, vlevel-1, m);
+    bottomViewUtil( root->right, hlevel+1, vlevel+1, m);
+    
+}
+//Function to return a list containing the bottom view of the given tree.
+vector<int> bottomView(Node *root)
+{
+   // Your Code Here
+   
+   map<int, pair<int, int>> m;
+   
+   int hlevel = 0; //level order up to down
+   int vlevel = 0; // -2 -1 0 1 2
+   
+   bottomViewUtil( root, hlevel, vlevel, m);
+   
+   vector<int> res;
+   for( auto i = m.begin(); i!= m.end(); i++){
+       res.push_back( i->second.first);
+   }
+   
+   return res;
+}
