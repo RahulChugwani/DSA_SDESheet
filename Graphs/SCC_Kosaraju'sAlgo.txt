@@ -1,0 +1,76 @@
+// Problem LInk:
+https://practice.geeksforgeeks.org/problems/strongly-connected-components-kosarajus-algo/1
+
+Given a Directed Graph with V vertices (Numbered from 0 to V-1) and E edges, Find the number of strongly connected components in the graph.
+Expected Time Complexity: O(V+E).
+Expected Auxiliary Space: O(V).
+
+
+// Code:
+
+class Solution
+{
+	public:
+	//Function to find number of strongly connected components in the graph.
+	void dfs_topologicalSort(int node, vector<int> adj[], vector<bool>& visited, stack<int>& st){
+	    
+	    visited[node] = true;
+	    for( int x: adj[node]){
+	        if(!visited[x])
+	            dfs_topologicalSort(x, adj, visited, st);
+	    }
+	    
+	    st.push(node);
+	}
+	
+	void dfsUtil( int node, vector<int> adjTranspose[], vector<bool>& tVisited){
+	    
+	    tVisited[node] = true;
+	    
+	    // cout << node << " ";
+	    
+	    for( int x: adjTranspose[node]){
+	        if( !tVisited[x])
+	            dfsUtil(x, adjTranspose, tVisited);
+	    }
+	    
+	}
+	
+    int kosaraju(int V, vector<int> adj[])
+    {
+        //code here
+        vector<bool> visited(V, false);
+        stack<int> st;
+        
+        // get topological sort in stack values
+        for( int i=0; i< V; i++){
+            if( !visited[i])
+                dfs_topologicalSort(i, adj, visited, st);
+        }
+        
+        //transpose the graph and create new transposed graph
+        vector<int> adjTranspose[V];
+        for( int i=0; i < V; i++){
+            for( int x: adj[i]){
+                adjTranspose[x].push_back(i);
+            }
+        }
+        
+        //travel adjTranspose in dfs manner with the help of stack
+        vector<bool> tVisited(V, false);
+        int count = 0;
+        
+        while( !st.empty()){
+            int node = st.top();
+            st.pop();
+            if( !tVisited[node]){
+                dfsUtil(node, adjTranspose, tVisited);
+                //cout << endl;
+                count++;
+            }
+        }
+        
+        return count;
+        
+    }
+};
