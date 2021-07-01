@@ -1,0 +1,91 @@
+// Problem Link:
+https://practice.geeksforgeeks.org/problems/steps-by-knight5927/1
+
+Given a square chessboard, the initial position of Knight and position of a target. 
+Find out the minimum steps a Knight will take to reach the target position.
+Note:
+The initial and the target position co-ordinates of Knight have been given accoring to 1-base indexing.
+
+Example 1:
+Input:
+N=6
+knightPos[ ] = {4, 5}
+targetPos[ ] = {1, 1}
+Output:
+3
+Explanation:
+
+Knight takes 3 step to reach from 
+(4, 5) to (1, 1):
+(4, 5) -> (5, 3) -> (3, 2) -> (1, 1).
+
+
+
+// Code:
+
+
+class Solution 
+{
+    public:
+    struct cell {
+        int x, y;
+        int dis;
+        cell() {}
+        cell(int x, int y, int dis)
+            : x(x), y(y), dis(dis)
+        {
+        }
+    };
+    
+    bool isSafe( int row, int col, vector<vector<int>>& vis, int N){
+        
+        if( row < 1 || row > N || col < 1 || col > N || vis[row][col])
+            return false;
+        
+        return true;
+    }
+    
+    //Function to find out minimum steps Knight needs to reach target position.
+	int minStepToReachTarget(vector<int>&KnightPos,vector<int>&TargetPos,int N)
+	{
+	    // Code here
+	    
+	    vector<vector<int>> vis(N+1, vector<int>(N+1));
+	    for( int i = 0; i < vis.size(); i++){
+	        for( int j =0; j < vis[0].size(); j++){
+	            vis[i][j] = false;
+	        }
+	    }
+	    
+	    int x[] = { -2, -1, 1, 2, -2, -1, 1, 2 };
+        int y[] = { -1, -2, -2, -1, 1, 2, 2, 1 };
+        
+	    queue<cell> q;
+	    vis[KnightPos[0]][KnightPos[1]] = true;
+	    q.push( cell(KnightPos[0],KnightPos[1], 0));
+	    
+	    int row, col;
+	    
+	    while(!q.empty()){
+	        
+	        cell t = q.front();
+	        q.pop();
+	        
+	        if( t.x  == TargetPos[0] && t.y == TargetPos[1])
+	            return t.dis;
+	            
+	        for( int i=0; i < 8; i++){
+	            row = t.x + x[i];
+	            col = t.y + y[i];
+	            
+	            if( isSafe(row, col, vis, N)){
+	                vis[row][col] = true;
+	                q.push( cell(row,col, t.dis + 1));
+	            }
+	        }
+	    }
+	    
+	    return -1;
+	    
+	}
+};
