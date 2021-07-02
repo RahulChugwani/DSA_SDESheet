@@ -1,0 +1,80 @@
+// Problem Link:
+https://leetcode.com/problems/number-of-operations-to-make-network-connected/
+
+
+There are n computers numbered from 0 to n-1 connected by ethernet cables connections forming a network where connections[i] = [a, b] represents a connection between computers a and b. 
+Any computer can reach any other computer directly or indirectly through the network.
+
+Given an initial computer network connections. You can extract certain cables between two directly connected computers, and place them between any pair of disconnected computers to make them directly connected.
+Return the minimum number of times you need to do this in order to make all the computers connected. If it's not possible, return -1. 
+
+
+Example 1:
+Input: n = 4, connections = [[0,1],[0,2],[1,2]]
+Output: 1
+Explanation: Remove cable between computer 1 and 2 and place between computers 1 and 3.
+
+Example 3:
+Input: n = 6, connections = [[0,1],[0,2],[0,3],[1,2]]
+Output: -1
+Explanation: There are not enough cables.
+
+Example 4:
+Input: n = 5, connections = [[0,1],[0,2],[3,4],[2,3]]
+Output: 0
+
+
+
+// Code:
+
+class Solution {
+public:
+    void bfs( int node, vector<vector<int>>& adj, vector<bool>& vis){
+        
+        vis[node] = true;
+        queue<int> q;
+        
+        q.push(node);
+        
+        while( !q.empty()){
+            
+            int temp = q.front();
+            q.pop();
+            
+            for( auto x: adj[temp]){     
+                if( !vis[x]){
+                    vis[x] = true; 
+                    q.push(x);
+                }
+            }       
+        }
+        
+        return;  
+    }
+    
+    int makeConnected(int n, vector<vector<int>>& connections) {
+        
+        vector<vector<int>> adj(n);
+        
+        if( connections.size() < n-1)
+            return -1;
+        
+        for( auto pair: connections){
+            adj[pair[0]].push_back(pair[1]);
+            adj[pair[1]].push_back( pair[0]);
+        } 
+        
+        vector<bool> vis(n, false);
+        int independent = 0;
+        
+        for( int i=0; i < n; i++){  
+            if(!vis[i]){
+                bfs(i, adj, vis);
+                independent++;
+            }  
+        }
+        
+        return (independent -1);      
+        
+    }
+};
