@@ -1,0 +1,94 @@
+// Problem Link:
+https://leetcode.com/problems/word-ladder-ii/
+
+
+A transformation sequence from word beginWord to word endWord using a dictionary wordList is a sequence of words beginWord -> s1 -> s2 -> ... -> sk such that:
+
+Every adjacent pair of words differs by a single letter.
+Every si for 1 <= i <= k is in wordList. Note that beginWord does not need to be in wordList.
+sk == endWord
+Given two words, beginWord and endWord, and a dictionary wordList, return all the shortest transformation sequences from beginWord to endWord, or an empty list if no such sequence exists. Each sequence should be returned as a list of the words [beginWord, s1, s2, ..., sk].
+
+
+Example 1:
+Input: beginWord = "hit", endWord = "cog", wordList = ["hot","dot","dog","lot","log","cog"]
+Output: [["hit","hot","dot","dog","cog"],["hit","hot","lot","log","cog"]]
+Explanation: There are 2 shortest transformation sequences:
+"hit" -> "hot" -> "dot" -> "dog" -> "cog"
+"hit" -> "hot" -> "lot" -> "log" -> "cog"
+
+
+// Code:
+
+
+class Solution {
+public:
+    
+    void dfs(string start, string end, unordered_map<string, unordered_set<string>>& adj, vector<string>& path, vector<vector<string>>& ans ){
+        
+        path.push_back(start);
+        
+        if( start == end){
+            ans.push_back(path);
+            path.pop_back();
+            return;
+        }
+        
+        for( auto x: adj[start]){
+            dfs(x, end, adj, path, ans);
+        }
+        
+        path.pop_back();
+        
+    }
+    vector<vector<string>> findLadders(string beginWord, string endWord, vector<string>& wordList) {
+        
+        unordered_set<string> mywords(wordList.begin(), wordList.end());
+        
+        unordered_map<string, unordered_set<string>> adj;  //special adj list which will store parent child relationship of high to low depth level
+        unordered_map<string, int> visited;  // to store the word and depth level of each word;
+        
+        queue<string> q; // this q will be used for BFS traversal.
+        
+        q.push( beginWord);
+        visited[beginWord] = 0;
+        
+        while( !q.empty() ){
+            
+            string curr = q.front();
+            q.pop();
+            string temp = curr;
+            
+            for( int i=0; i < curr.length(); i++){
+                
+                for(char c = 'a'; c <= 'z'; c++){
+                    if( temp[i] == c)
+                        continue;
+                    
+                    temp[i] = c;
+                    if(mywords.count(temp) > 0){
+                        
+                        if( visited.count(temp) == 0){
+                            visited[temp] = visited[curr]+1;
+                            q.push(temp);
+                            adj[curr].insert(temp);
+                        }
+                        else if( visited[temp] == visited[curr]+1)
+                        {
+                            adj[curr].insert(temp);
+                        }
+                    }
+                }
+                
+                temp[i] = curr[i];
+            }
+        }
+        
+        vector<string> path;
+        vector<vector<string>> ans;
+        
+        dfs( beginWord, endWord, adj, path, ans);
+        
+        return ans;
+    }
+};
