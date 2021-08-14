@@ -1,5 +1,5 @@
 // Problem Link:
-https://practice.geeksforgeeks.org/problems/postorder-traversal-iterative/
+https://practice.geeksforgeeks.org/problems/postorder-traversal-iterative/1/
 
 Given a binary tree. Find the postorder traversal of the tree without using recursion.
 

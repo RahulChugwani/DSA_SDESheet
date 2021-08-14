@@ -1,5 +1,5 @@
 // Problem Link:
-https://practice.geeksforgeeks.org/problems/inorder-traversal-iterative/
+https://practice.geeksforgeeks.org/problems/inorder-traversal-iterative/1/
 
 
 Given a binary tree. Find the inorder traversal of the tree without using recursion.
