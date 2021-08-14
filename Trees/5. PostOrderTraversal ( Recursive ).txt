@@ -1,0 +1,53 @@
+// Problem Link:
+https://practice.geeksforgeeks.org/problems/postorder-traversal/1
+
+
+Given a binary tree, find the Postorder Traversal of it.
+Expected Time Complexity: O(N).
+Expected Auxiliary Space: O(N).
+
+Example 1:
+Input:
+        19
+     /     \
+    10      8
+  /    \
+ 11    13
+Output: 11 13 10 8 19
+
+Example 2:
+Input:
+          11
+         /
+       15
+      /
+     7
+Output: 7 15 11
+
+
+
+// Code:
+
+void postOrderUtil( Node* root, vector<int>& ans){
+    
+    if( root == NULL)
+        return;
+    
+    postOrderUtil( root->left, ans);
+    postOrderUtil( root->right, ans);
+    ans.push_back( root->data);
+    
+}
+
+//Function to return a list containing the postorder traversal of the tree.
+vector <int> postOrder(Node* root)
+{
+  // Your code here
+  if( root == NULL)
+    return vector<int>();
+    
+  vector<int> ans;
+  postOrderUtil( root, ans);
+  
+  return ans;
+}

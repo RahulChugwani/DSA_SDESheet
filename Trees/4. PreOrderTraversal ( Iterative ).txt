@@ -1,0 +1,77 @@
+// Problem Link:
+https://practice.geeksforgeeks.org/problems/preorder-traversal-iterative/1/
+
+Expected time complexity: O(N)
+Expected auxiliary space: O(N)
+
+Given a binary tree. Find the preorder traversal of the tree without using recursion.
+
+Example 1:
+Input:
+           1
+         /   \
+        2     3
+      /  \
+     4    5
+Output: 1 2 4 5 3
+Explanation:
+Preorder traversal (Root->Left->Right) of 
+the tree is 1 2 4 5 3.
+
+Example 2
+Input:
+            8
+          /   \
+         1      5
+          \    /  \
+           7  10   6
+            \  /
+            10 6
+Output: 8 1 7 10 5 10 6 6 
+Explanation:
+Preorder traversal (Root->Left->Right) 
+of the tree is 8 1 7 10 5 10 6 6.
+
+
+
+// Code:
+
+/* Tree Node
+struct Node {
+    int data;
+    Node* left;
+    Node* right;
+};
+*/
+
+vector<int> preOrder(Node* root)
+{
+    //code here
+    if( root == NULL)
+        return vector<int>();
+    
+    vector<int> ans;
+    stack<Node*> st;
+    
+    Node* temp = root;
+    
+    st.push(temp);
+    
+    while( !st.empty()){
+        
+        Node* curr = st.top();
+        st.pop();
+        
+        ans.push_back( curr->data);
+        
+        if( curr->right)
+            st.push(curr->right);
+        
+        if( curr->left)
+            st.push( curr->left);
+            
+    }
+    
+    return ans;
+    
+}

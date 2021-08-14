@@ -1,0 +1,81 @@
+// Problem Link:
+https://practice.geeksforgeeks.org/problems/postorder-traversal-iterative/
+
+Given a binary tree. Find the postorder traversal of the tree without using recursion.
+
+Expected time complexity: O(N)
+Expected auxiliary space: O(N)
+
+Example 1
+Input:
+           1
+         /   \
+        2     3
+      /  \
+     4    5
+
+Output: 4 5 2 3 1
+Explanation:
+Postorder traversal (Left->Right->Root) of 
+the tree is 4 5 2 3 1.
+
+Example 2
+Input:
+             8
+          /      \
+        1          5
+         \       /   \
+          7     10    6
+           \   /
+            10 6
+
+Output: 10 7 1 6 10 6 5 8 
+Explanation:
+Inorder traversal (Left->Right->Root) 
+of the tree is 10 7 1 6 10 6 5 8 
+
+
+// Code:
+
+
+vector<int> postOrder(Node* node) {
+    // code here
+    
+    if(node == NULL)
+        return vector<int>();
+        
+    vector<int> ans;
+    stack<Node*> st;
+    
+    Node* temp = node;
+    
+    while( temp || !st.empty()){
+        
+        if( temp!= NULL){  // here we're going till left child.
+            st.push(temp);
+            temp = temp->left;
+        }
+        else{           // if no left child is there,will check if right child is present or not
+            
+            Node* curr = st.top()->right;
+            
+            if( curr == NULL){      //if right child is absent means push the node to ans.
+                curr = st.top();
+                st.pop();
+                ans.push_back(curr->data);
+                
+                while( !st.empty() && curr == st.top()->right){     // if that child is the right child of parent, pop all the series of right child and push to ans.
+                    curr = st.top();
+                    ans.push_back(curr->data);
+                    st.pop();
+                }
+            }
+            else{       //if right child is present, set temp = curr, so that same process of finding left child continues.
+                temp = curr;
+            }
+        }
+    }
+    
+    
+    return ans;
+}
